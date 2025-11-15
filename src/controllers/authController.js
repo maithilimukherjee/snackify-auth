@@ -37,6 +37,10 @@ export const register = async (req, res) => {
   }
 };
 
+const generate2FACode = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
 export const login = async (req, res) => {
   try{
 
@@ -66,7 +70,20 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "invalid credentials" });
     }
 
-    // 4. successful login
+    //4, generate 2FA code and expiry
+    const code = generate2FACode();
+    const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
+
+    //5. store code and expiry in DB
+    await pool.query(
+      "UPDATE users SET twofa_code=$1, twofa_expiry=$2 WHERE id=$3",
+      [code, expiry, user.id]
+    );
+
+    //6. send code to user (console log for now)
+    console.log(`2FA code for ${email}: ${code}`);
+
+    //7. respond to client
     res.status(200).json({ message: "login successful" });
   } catch (error) {
     console.error("login error:", error);
