@@ -4,14 +4,14 @@ import { v4 as uuidv4 } from "uuid";
 
 export const register = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { name, email, password, food_pref } = req.body;
 
-    // 1. validate input
-    if (!email || !password) {
-      return res.status(400).json({ message: "email and password required" });
+    if (!email || !password || !name || !food_pref) {
+      return res.status(400).json({ message: "fields cannot be empty!" });
     }
 
-    // 2. check if user exists
+    console.log({ name, email, password, food_pref });
+
     const existing = await pool.query(
       "SELECT * FROM users WHERE email=$1",
       [email]
@@ -21,16 +21,12 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: "user already exists" });
     }
 
-    // 3. hash password
     const hashed = await bcrypt.hash(password, 10);
-
-    // 4. generate user id
     const id = uuidv4();
 
-    // 5. insert into db
     await pool.query(
-      "INSERT INTO users (id, email, password) VALUES ($1, $2, $3)",
-      [id, email, hashed]
+      "INSERT INTO users (id, email, password, food_pref, name) VALUES ($1, $2, $3, $4, $5)",
+      [id, email, hashed, food_pref, name]
     );
 
     res.status(201).json({ message: "user registered successfully" });
@@ -77,3 +73,5 @@ export const login = async (req, res) => {
     res.status(500).json({ message: "server error" });
   }
 };
+
+
