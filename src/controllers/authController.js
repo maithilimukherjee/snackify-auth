@@ -1,6 +1,7 @@
 import { pool } from "../config/db.js";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
+import { transporter } from "../config/mailer.js";
 
 export const register = async (req, res) => {
   try {
@@ -80,15 +81,65 @@ export const login = async (req, res) => {
       [code, expiry, user.id]
     );
 
-    //6. send code to user (console log for now)
-    console.log(`2FA code for ${email}: ${code}`);
+    //6. send code to user 
+    await transporter.sendMail({
+      from: process.env.MAIL_FROM,
+      to: email,
+      subject: "Your 2FA Code",
+      text: `Your 2FA code is ${code}. It expires in 10 minutes.`,
+    });
 
     //7. respond to client
-    res.status(200).json({ message: "login successful" });
+    res.status(200).json({ message: "2FA code sent to ur email" });
   } catch (error) {
     console.error("login error:", error);
     res.status(500).json({ message: "server error" });
   }
 };
+
+export const verify2FA = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+
+    // 1. validate input
+    if (!email || !code) {
+      return res.status(400).json({ message: "email and code required" });
+    }
+
+    // 2. fetch user
+    const existing = await pool.query(
+      "SELECT * FROM users WHERE email=$1",
+      [email]
+    );
+
+    if (existing.rows.length === 0) {
+      return res.status(400).json({ message: "invalid credentials" });
+    }
+
+    const user = existing.rows[0];
+
+    // 3. check code and expiry
+    if (user.twofa_code !== code) {
+      return res.status(400).json({ message: "invalid 2FA code" });
+    }
+
+    if (new Date() > new Date(user.twofa_expiry)) {
+      return res.status(400).json({ message: "2FA code expired" });
+    }
+
+    // 4. clear 2FA code and expiry
+    await pool.query(
+      "UPDATE users SET twofa_code=NULL, twofa_expiry=NULL WHERE id=$1",
+      [user.id]
+    );
+
+    // 5. respond to client
+    res.status(200).json({ message: "2FA verification successful" });
+
+  } catch (error) {
+    console.error("verify2FA error:", error);
+    res.status(500).json({ message: "server error" });
+  }
+};  
 
 
