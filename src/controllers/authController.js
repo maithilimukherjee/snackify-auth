@@ -40,3 +40,40 @@ export const register = async (req, res) => {
     res.status(500).json({ message: "server error" });
   }
 };
+
+export const login = async (req, res) => {
+  try{
+
+    const { email, password } = req.body;
+
+    // 1. validate input
+    if (!email || !password) {
+      return res.status(400).json({ message: "email and password required" });
+    }
+
+    // 2. check if user exists
+    const existing = await pool.query(
+      "SELECT * FROM users WHERE email=$1",
+      [email]
+    );
+
+    if (existing.rows.length === 0) {
+      return res.status(400).json({ message: "invalid credentials" });
+    }
+
+    const user = existing.rows[0];
+
+    // 3. compare password
+    const match = await bcrypt.compare(password, user.password);
+
+    if (!match) {
+      return res.status(400).json({ message: "invalid credentials" });
+    }
+
+    // 4. successful login
+    res.status(200).json({ message: "login successful" });
+  } catch (error) {
+    console.error("login error:", error);
+    res.status(500).json({ message: "server error" });
+  }
+};
