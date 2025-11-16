@@ -131,7 +131,7 @@ export const verify2FA = async (req, res) => {
       [user.id]
     );
 
-    // 🔥 generate jwt
+    // generate jwt
     const token = jwt.sign(
       { id: user.id, email: user.email },
       process.env.JWT_SECRET,
