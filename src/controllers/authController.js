@@ -2,6 +2,7 @@ import { pool } from "../config/db.js";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 import { transporter } from "../config/mailer.js";
+import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
   try {
@@ -101,12 +102,10 @@ export const verify2FA = async (req, res) => {
   try {
     const { email, code } = req.body;
 
-    // 1. validate input
     if (!email || !code) {
       return res.status(400).json({ message: "email and code required" });
     }
 
-    // 2. fetch user
     const existing = await pool.query(
       "SELECT * FROM users WHERE email=$1",
       [email]
@@ -118,7 +117,6 @@ export const verify2FA = async (req, res) => {
 
     const user = existing.rows[0];
 
-    // 3. check code and expiry
     if (user.twofa_code !== code) {
       return res.status(400).json({ message: "invalid 2FA code" });
     }
@@ -127,19 +125,48 @@ export const verify2FA = async (req, res) => {
       return res.status(400).json({ message: "2FA code expired" });
     }
 
-    // 4. clear 2FA code and expiry
+    // clear 2fa code
     await pool.query(
       "UPDATE users SET twofa_code=NULL, twofa_expiry=NULL WHERE id=$1",
       [user.id]
     );
 
-    // 5. respond to client
-    res.status(200).json({ message: "2FA verification successful" });
+    // 🔥 generate jwt
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES }
+    );
+
+    res.status(200).json({ 
+      message: "2FA verification successful",
+      token 
+    });
 
   } catch (error) {
     console.error("verify2FA error:", error);
     res.status(500).json({ message: "server error" });
   }
-};  
+};
+ 
+export const auth = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "unauthorized" });
+    }
+    
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    req.user = decoded;
+    next();
+  }
+  catch (error) {
+    console.error("auth middleware error:", error);
+    res.status(401).json({ message: "unauthorized" });
+  }
+};
 
 
