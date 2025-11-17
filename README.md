@@ -4,9 +4,7 @@
 
 i’m a coder who also loves to cook. one evening, i stood in front of my fridge with zero ideas for what to make. i wished some app would just suggest recipes based on what i had.  
 my tech-girly brain was like, “um, you can code that yourself.” so i did. customizing my own tool felt cooler than using whatever’s already out there, plus i got to flex both my backend skills and my love for food. 
-so here's my very own api that i coded from scratch. now, snackify-auth helps me whip up dinner with no stress and no endless fridge-staring.
-
-
+so here's my very own api that i coded from scratch. presenting to you, **snackify-auth**.
 ---
 
 ## about the project
