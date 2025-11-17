@@ -20,7 +20,7 @@ through building this API, you’ll see:
 - **authentication & security:** bcrypt password hashing, 2FA, JWT-based route protection
 - **email integration:** real-time 2FA via nodemailer
 - **api design:** registration, login, verification, profile, and recommendations endpoints
-- **algorithmic Thinking:** matching recipes based on user input, preference, and healthiness
+- **algorithmic thinking:** matching recipes based on user input, preference, and healthiness
 - **config management:** all sensitive creds managed via `.env`
 - **error handling:** neat responses for expired codes, invalid input, and unauthorized requests
 
