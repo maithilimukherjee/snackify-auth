@@ -3,7 +3,9 @@
 ## backstory — why this API exists
 
 i’m a coder who also loves to cook. one evening, i stood in front of my fridge with zero ideas for what to make. i wished some app would just suggest recipes based on what i had.  
-my inner tech-girly was like, “um, babe, you can code that yourself.” so i did. customizing my own tool felt cooler than using whatever’s already out there, plus i got to flex both my backend skills and my love for food. now, snackify-auth helps me whip up dinner with no stress and no endless fridge-staring.
+my tech-girly brain was like, “um, you can code that yourself.” so i did. customizing my own tool felt cooler than using whatever’s already out there, plus i got to flex both my backend skills and my love for food. now, snackify-auth helps me whip up dinner with no stress and no endless fridge-staring.
+
+so here's my very own api that i coded from scratch.
 
 ---
 
@@ -23,30 +25,30 @@ my inner tech-girly was like, “um, babe, you can code that yourself.” so i d
 
 through building this API, you’ll see:
 
-- **Backend Development:** Node.js, Express, PostgreSQL, Neon DB for user and recipe data
-- **Authentication & Security:** bcrypt password hashing, 2FA, JWT-based route protection
-- **Email Integration:** real-time 2FA via nodemailer
-- **API Design:** registration, login, verification, profile, and recommendations endpoints
-- **Algorithmic Thinking:** matching recipes based on user input, preference, and healthiness
-- **Config Management:** all sensitive creds managed via `.env`
-- **Error Handling:** neat responses for expired codes, invalid input, and unauthorized requests
+- **backend development:** Node.js, Express, PostgreSQL, Neon DB for user and recipe data
+- **authentication & security:** bcrypt password hashing, 2FA, JWT-based route protection
+- **email integration:** real-time 2FA via nodemailer
+- **api design:** registration, login, verification, profile, and recommendations endpoints
+- **algorithmic Thinking:** matching recipes based on user input, preference, and healthiness
+- **config management:** all sensitive creds managed via `.env`
+- **error handling:** neat responses for expired codes, invalid input, and unauthorized requests
 
 ---
 
 ## technologies & tools
 
-- **Backend:** Node.js, Express.js, PostgreSQL, Neon DB  
-- **Authentication:** bcrypt, JWT, nodemailer for 2FA  
-- **Utilities:** uuid, dotenv  
-- **Data:** JavaScript (in-memory recipes), PostgreSQL  
-- **Testing:** Postman, curl  
-- **Version Control:** Git & GitHub  
+- **backend:** Node.js, Express.js, PostgreSQL, Neon DB  
+- **authentication:** bcrypt, JWT, nodemailer for 2FA  
+- **utilities:** uuid, dotenv  
+- **data:** JavaScript (in-memory recipes), PostgreSQL  
+- **testing:** Postman, curl  
+- **version control:** Git & GitHub  
 
 ---
 
 ## endpoints & usage
 
-### 1. Register
+### 1. register
 
 `POST /api/auth/register`
 
@@ -69,7 +71,7 @@ through building this API, you’ll see:
 
 ---
 
-### 2. Login
+### 2. login
 
 `POST /api/auth/login`
 
@@ -92,7 +94,7 @@ _2FA code is sent via email_
 
 ---
 
-### 3. Verify 2FA
+### 3. verify 2FA
 
 `POST /api/auth/verify2fa`
 
@@ -116,7 +118,7 @@ _use this JWT token to access protected routes._
 
 ---
 
-### 4. Get Profile
+### 4. get profile
 
 `GET /api/auth/profile`
 
@@ -137,7 +139,7 @@ Authorization: Bearer <jwt-token>
 
 ---
 
-### 5. Recommend Recipes
+### 5. recommend recipes
 
 `POST /api/recommend`
 
@@ -203,4 +205,4 @@ _filters for food preference and matches recipes using your provided ingredients
 ## closing thoughts
 
 this project is my mashup of two things i love: coding & cooking.  
-it’s secure, practical, and 100% built by me — proof that backend skills, security best-practices, and a little personal flavor can combine into something both useful *and* fun.
+it’s secure, practical and proof that backend skills, security best-practices, and a little personal flavor can combine into something both useful *and* fun.
