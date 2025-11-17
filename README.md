@@ -1,15 +1,10 @@
 # snackify-auth
 
-## backstory — why this API exists
-
-i’m a coder who also loves to cook. one evening, i stood in front of my fridge with zero ideas for what to make. i wished some app would just suggest recipes based on what i had.  
-my tech-girly brain was like, “um, you can code that yourself.” and i did. customizing my own tool felt cooler than using whatever’s already out there, plus i got to flex both my backend skills and my love for food. 
-so here's my very own api that i coded from scratch. presenting to you, snackify-auth.
 ---
 
 ## about the project
 
-**snackify-auth** is a Node.js API for secure user authentication, complete with:
+**snackify-auth** is a Node.js API that i coded from scratch, for secure user authentication, complete with:
 
 1. user **registration** & **login** (passwords are securely hashed)
 2. **2-factor authentication (2FA)** via email to keep your logins super safe
