@@ -1,7 +1,5 @@
 # snackify-auth
 
----
-
 ## about the project
 
 **snackify-auth** is a Node.js API that i coded from scratch, for secure user authentication, complete with:
